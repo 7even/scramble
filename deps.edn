@@ -1,0 +1,4 @@
+{:aliases {:clj {:extra-paths ["src/clj"]}
+           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}}
+                  :extra-paths ["test/clj"]
+                  :main-opts ["-m" "kaocha.runner"]}}}
