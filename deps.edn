@@ -1,8 +1,17 @@
 {:aliases {:clj {:extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
 
                               ;; HTTP
-                              ring/ring {:mvn/version "1.10.0"}}
+                              ring/ring {:mvn/version "1.10.0"}
+
+                              ;; Routing
+                              bidi/bidi {:mvn/version "2.1.6"}
+
+                              ;; Content encoding/decoding
+                              metosin/muuntaja {:mvn/version "0.6.8"}}
                  :extra-paths ["src/clj"]}
-           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}}
+           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}
+                               ring/ring-mock {:mvn/version "0.4.0"}}
                   :extra-paths ["test/clj"]
-                  :main-opts ["-m" "kaocha.runner"]}}}
+                  :main-opts ["-m" "kaocha.runner"]}
+           :dev {:extra-deps {ring/ring-mock {:mvn/version "0.4.0"}}
+                 :extra-paths ["test/clj"]}}}
