@@ -1,4 +1,8 @@
-{:aliases {:clj {:extra-paths ["src/clj"]}
+{:aliases {:clj {:extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
+
+                              ;; HTTP
+                              ring/ring {:mvn/version "1.10.0"}}
+                 :extra-paths ["src/clj"]}
            :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}}
                   :extra-paths ["test/clj"]
                   :main-opts ["-m" "kaocha.runner"]}}}
