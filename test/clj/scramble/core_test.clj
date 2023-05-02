@@ -32,6 +32,6 @@
       (let [params {:scramble/str1 :foo
                     :scramble/str3 4}
             response (get-response params)]
-        (is (= 422 (:status response)))
+        (is (= 400 (:status response)))
         (is (= {:scramble/error "Invalid params"}
                (:body response)))))))
