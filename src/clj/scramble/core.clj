@@ -3,6 +3,8 @@
             [clojure.spec.alpha :as s]
             [muuntaja.middleware :as m]
             [ring.adapter.jetty :refer [run-jetty]]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [scramble.html :refer [page]]
             [scramble.scramble :refer [scramble?]]))
 
 (s/def :scramble/str1 string?)
@@ -20,22 +22,26 @@
      :body {:scramble/error "Invalid params"}}))
 
 (def routes
-  ["" {:post {"/api/scramble" scramble-handler}
+  ["" {:get {"/" (constantly {:status 200
+                              :headers {"Content-Type" "text/html"}
+                              :body page})}
+       :post {"/api/scramble" scramble-handler}
        true (fn [req]
               {:status 404
                :body "Not found"})}])
 
 (def handler
   (-> (make-handler routes)
-      m/wrap-format))
+      m/wrap-format
+      (wrap-resource "public")))
 
 (defonce server
   (atom nil))
 
 (defn start []
   (reset! server
-          (run-jetty handler {:port 7000
-                              :join? false})))
+          (run-jetty #'handler {:port 7000
+                                :join? false})))
 
 (defn stop []
   (.stop @server)

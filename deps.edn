@@ -3,12 +3,20 @@
                               ;; HTTP
                               ring/ring {:mvn/version "1.10.0"}
 
+                              ;; HTML
+                              hiccup/hiccup {:mvn/version "1.0.5"}
+
                               ;; Routing
                               bidi/bidi {:mvn/version "2.1.6"}
 
                               ;; Content encoding/decoding
                               metosin/muuntaja {:mvn/version "0.6.8"}}
-                 :extra-paths ["src/clj"]}
+                 :extra-paths ["src/clj" "resources"]}
+           :cljs {:extra-deps {thheller/shadow-cljs {:mvn/version "2.23.3"}
+
+                               ;; Rendering
+                               reagent/reagent {:mvn/version "1.2.0"}}
+                  :extra-paths ["src/cljs"]}
            :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}
                                ring/ring-mock {:mvn/version "0.4.0"}}
                   :extra-paths ["test/clj"]

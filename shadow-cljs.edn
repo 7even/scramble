@@ -1,0 +1,5 @@
+{:deps {:aliases [:cljs]}
+ :builds {:main {:target :browser
+                 :output-dir "resources/public/js"
+                 :modules {:main {:init-fn scramble.ui.core/render}}
+                 :devtools {:after-load scramble.ui.core/render}}}}
