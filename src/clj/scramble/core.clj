@@ -4,6 +4,7 @@
             [muuntaja.middleware :as m]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.resource :refer [wrap-resource]]
+            [ring.util.response :refer [bad-request content-type not-found response]]
             [scramble.html :refer [page]]
             [scramble.scramble :refer [scramble?]]))
 
@@ -15,20 +16,15 @@
 
 (defn- scramble-handler [{params :body-params}]
   (if (s/valid? ::scramble params)
-    {:status 200
-     :body {:scramble/success? (scramble? (:scramble/str1 params)
-                                          (:scramble/str2 params))}}
-    {:status 422
-     :body {:scramble/error "Invalid params"}}))
+    (response {:scramble/success? (scramble? (:scramble/str1 params)
+                                             (:scramble/str2 params))})
+    (bad-request {:scramble/error "Invalid params"})))
 
 (def routes
-  ["" {:get {"/" (constantly {:status 200
-                              :headers {"Content-Type" "text/html"}
-                              :body page})}
+  ["" {:get {"/" (constantly (-> (response page)
+                                 (content-type "text/html")))}
        :post {"/api/scramble" scramble-handler}
-       true (fn [req]
-              {:status 404
-               :body "Not found"})}])
+       true (constantly (not-found "Not found"))}])
 
 (def handler
   (-> (make-handler routes)
