@@ -31,14 +31,9 @@
       m/wrap-format
       (wrap-resource "public")))
 
-(defonce server
-  (atom nil))
-
 (defn start []
-  (reset! server
-          (run-jetty #'handler {:port 7000
-                                :join? false})))
+  (run-jetty #'handler {:port 7000
+                        :join? false}))
 
-(defn stop []
-  (.stop @server)
-  (reset! server nil))
+(defn stop [server]
+  (.stop server))
