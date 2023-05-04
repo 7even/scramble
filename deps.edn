@@ -1,9 +1,9 @@
 {:aliases {:clj {:extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
 
-                              ;; HTTP
+                              ;; HTTP server
                               ring/ring {:mvn/version "1.10.0"}
 
-                              ;; HTML
+                              ;; HTML rendering
                               hiccup/hiccup {:mvn/version "1.0.5"}
 
                               ;; Routing
@@ -15,7 +15,10 @@
            :cljs {:extra-deps {thheller/shadow-cljs {:mvn/version "2.23.3"}
 
                                ;; Rendering
-                               reagent/reagent {:mvn/version "1.2.0"}}
+                               reagent/reagent {:mvn/version "1.2.0"}
+
+                               ;; HTTP requests
+                               cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}}
                   :extra-paths ["src/cljs"]}
            :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}
                                ring/ring-mock {:mvn/version "0.4.0"}}
