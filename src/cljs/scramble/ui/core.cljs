@@ -1,6 +1,7 @@
 (ns scramble.ui.core
   (:require [ajax.core :refer [POST]]
             [ajax.edn :refer [edn-request-format edn-response-format]]
+            [clojure.string :as str]
             [reagent.core :as r]
             [reagent.dom :as rd]))
 
@@ -9,21 +10,60 @@
            :scramble/str2 ""}))
 
 (defonce result
-  (r/atom nil))
+  (r/atom {}))
+
+(defn- get-errors [{:scramble/keys [str1 str2]}]
+  (let [add-error (fnil conj [])]
+    (cond-> {}
+      (str/blank? str1)
+      (update-in [:validation/errors :scramble/str1]
+                 add-error
+                 "First word is required")
+
+      (not (re-matches #"[a-z]*" str1))
+      (update-in [:validation/errors :scramble/str1]
+                 add-error
+                 "First word must consist of lowercase letters")
+
+      (str/blank? str2)
+      (update-in [:validation/errors :scramble/str2]
+                 add-error
+                 "Second word is required")
+
+      (not (re-matches #"[a-z]*" str2))
+      (update-in [:validation/errors :scramble/str2]
+                 add-error
+                 "Second word must consist of lowercase letters"))))
 
 (defn- submit []
-  (POST "/api/scramble"
-        {:params @field-values
-         :format (edn-request-format)
-         :response-format (edn-response-format)
-         :handler (fn [{:scramble/keys [success?]}]
-                    (reset! result success?))}))
+  (let [values @field-values
+        errors (get-errors values)]
+    (if (seq errors)
+      (reset! result errors)
+      (POST "/api/scramble"
+            {:params values
+             :format (edn-request-format)
+             :response-format (edn-response-format)
+             ;; TODO: handle errors
+             :handler (fn [response]
+                        (reset! result response))}))))
 
 (defn- str-input [state-key placeholder]
-  [:input {:type :text
-           :placeholder placeholder
-           :value (get @field-values state-key)
-           :on-change #(swap! field-values assoc state-key (-> % .-target .-value))}])
+  [:div {:style {:display :flex
+                 :flex-direction :column
+                 :gap "0.3rem"}}
+   [:input {:type :text
+            :placeholder placeholder
+            :value (get @field-values state-key)
+            :on-change #(swap! field-values assoc state-key (-> % .-target .-value))}]
+   (let [errors (get-in @result [:validation/errors state-key])]
+     (when (seq errors)
+       [:div {:style {:color :red}}
+        (doall
+         (for [error errors]
+           ^{:key error}
+           [:div {:style {:font-size "12pt"}}
+            error]))]))])
 
 (defn interface []
   [:div {:style {:display :flex
@@ -43,10 +83,10 @@
     [str-input :scramble/str1 "rekqodlw"]
     [str-input :scramble/str2 "world"]
     [:div {:style {:display :flex
-                   :gap "1rem"}}
+                   :justify-content :space-between}}
      [:button {:on-click (fn [])}
       "Scramble"]
-     (when-some [success? @result]
+     (when-some [success? (:scramble/success? @result)]
        (if success?
          [:div {:style {:color :green}}
           "Match"]
