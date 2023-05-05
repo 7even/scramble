@@ -5,14 +5,24 @@
             [reagent.core :as r]
             [reagent.dom :as rd]))
 
-(defonce field-values
+(defonce
+  ^{:doc "An atom holding values of form inputs."}
+  field-values
   (r/atom {:scramble/str1 ""
            :scramble/str2 ""}))
 
-(defonce result
+(defonce
+  ^{:doc "An atom holding the result of checking the form values.
+  May have `:scramble/success?` key if the values were checked
+  by the backend app or `:validation/errors` key if the clientside
+  validation found errors."}
+  result
   (r/atom {}))
 
-(defn- get-errors [{:scramble/keys [str1 str2]}]
+(defn- get-errors
+  "Given a map with two strings, checks both - if any of them is empty or
+  includes characters other than lowercase latin letters, returns errors."
+  [{:scramble/keys [str1 str2]}]
   (let [add-error (fnil conj [])]
     (cond-> {}
       (str/blank? str1)
@@ -35,7 +45,11 @@
                  add-error
                  "Second word must consist of lowercase letters"))))
 
-(defn- submit []
+(defn- submit
+  "Validates values from `field-values`, then if they're valid, makes a request
+  to the server and puts the response inside `result`; otherwise puts
+  the validation errors into `result`."
+  []
   (let [values @field-values
         errors (get-errors values)]
     (if (seq errors)
@@ -48,7 +62,11 @@
              :handler (fn [response]
                         (reset! result response))}))))
 
-(defn- str-input [state-key placeholder]
+(defn- str-input
+  "Renders an input for a string and a list of related errors below.
+  `state-key` is used to lookup the current input value inside `field-values`
+  while `placeholder` serves as a placeholder for an input."
+  [state-key placeholder]
   [:div {:style {:display :flex
                  :flex-direction :column
                  :gap "0.3rem"}}
@@ -65,7 +83,9 @@
            [:div {:style {:font-size "12pt"}}
             error]))]))])
 
-(defn interface []
+(defn interface
+  "Renders the page."
+  []
   [:div {:style {:display :flex
                  :justify-content :center
                  :align-items :center
@@ -93,6 +113,9 @@
          [:div {:style {:color :red}}
           "Mismatch"]))]]])
 
-(defn render []
+(defn render
+  "Main entry point of the application; mounts the reagent app on
+  the root element of the page."
+  []
   (rd/render [interface]
              (js/document.getElementById "root")))
