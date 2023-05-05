@@ -58,9 +58,10 @@
             {:params values
              :format (edn-request-format)
              :response-format (edn-response-format)
-             ;; TODO: handle errors
              :handler (fn [response]
-                        (reset! result response))}))))
+                        (reset! result response))
+             :error-handler (fn [response]
+                              (println "Something went wrong:" (pr-str response)))}))))
 
 (defn- str-input
   "Renders an input for a string and a list of related errors below.
