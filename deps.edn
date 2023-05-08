@@ -25,4 +25,6 @@
                   :extra-paths ["test/clj"]
                   :main-opts ["-m" "kaocha.runner"]}
            :dev {:extra-deps {ring/ring-mock {:mvn/version "0.4.0"}}
-                 :extra-paths ["dev" "test/clj"]}}}
+                 :extra-paths ["dev" "test/clj"]}
+           :build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.4"}}
+                   :ns-default build}}}

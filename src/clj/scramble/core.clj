@@ -6,7 +6,8 @@
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :refer [bad-request content-type not-found response]]
             [scramble.html :refer [page]]
-            [scramble.scramble :refer [scramble?]]))
+            [scramble.scramble :refer [scramble?]])
+  (:gen-class))
 
 (s/def :scramble/str1 string?)
 (s/def :scramble/str2 string?)
@@ -37,3 +38,6 @@
 
 (defn stop [server]
   (.stop server))
+
+(defn -main [& args]
+  (start))
