@@ -1,4 +1,4 @@
-# Scramble
+# Scramble [![CI](https://github.com/7even/scramble/actions/workflows/ci.yml/badge.svg)](https://github.com/7even/scramble/actions/workflows/ci.yml)
 
 This is an application that accepts two strings and checks if one of them can be built using a portion of characters from the other string.
 
@@ -22,7 +22,7 @@ It is also possible to start the application with `clj -A:clj:cljs:dev`, but thi
 
 ## Testing
 
-Tests can be run with `clj -M:clj:test`.
+Tests can be run with `clj -M:clj:test`. A GitHub Actions [workflow](https://github.com/7even/scramble/blob/master/.github/workflows/ci.yml) is configured to run tests after each push.
 
 ## Building
 
