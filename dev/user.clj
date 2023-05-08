@@ -1,4 +1,9 @@
 (ns user
+  "Initial namespace in the backend app REPL. Contains helper functions
+  for starting/stopping the project as well as `cljs-repl` function
+  for frontend development.
+
+  Starts the application when evaluated for the first time."
   (:require [scramble.core :refer [start stop]]
             [shadow.cljs.devtools.api :as shadow]
             [shadow.cljs.devtools.server :as server]))

@@ -1,4 +1,5 @@
 (ns scramble.html
+  "Function that renders HTML for the frontend app."
   (:require [hiccup.page :refer [html5]]))
 
 (def page

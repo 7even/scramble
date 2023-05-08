@@ -1,4 +1,6 @@
-(ns scramble.scramble)
+(ns scramble.scramble
+  "Function that determines if one string can be built using some characters
+  from another string.")
 
 (defn scramble?
   "Returns true if `str2` can be assembled from a portion of characters

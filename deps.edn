@@ -1,4 +1,5 @@
-{:aliases {:clj {:extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
+{:aliases {;; an alias to run the backend app
+           :clj {:extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}
 
                               ;; HTTP server
                               ring/ring {:mvn/version "1.10.0"}
@@ -12,6 +13,7 @@
                               ;; Content encoding/decoding
                               metosin/muuntaja {:mvn/version "0.6.8"}}
                  :extra-paths ["src/clj" "resources"]}
+           ;; an alias for shadow-cljs to compile the frontend app
            :cljs {:extra-deps {thheller/shadow-cljs {:mvn/version "2.23.3"}
 
                                ;; Rendering
@@ -20,11 +22,20 @@
                                ;; HTTP requests
                                cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}}
                   :extra-paths ["src/cljs"]}
-           :test {:extra-deps {lambdaisland/kaocha {:mvn/version "1.82.1306"}
+           ;; an additional alias to run backend tests
+           ;; (must be used in conjunction with the :clj alias)
+           :test {:extra-deps {;; Test runner
+                               lambdaisland/kaocha {:mvn/version "1.82.1306"}
+
+                               ;; Building Ring request maps used in tests
                                ring/ring-mock {:mvn/version "0.4.0"}}
                   :extra-paths ["test/clj"]
                   :main-opts ["-m" "kaocha.runner"]}
+           ;; an additional alias for REPL driven development
+           ;; (must be used together with :clj and :cljs aliases
+           ;; in order to start a full-fledged REPL)
            :dev {:extra-deps {ring/ring-mock {:mvn/version "0.4.0"}}
                  :extra-paths ["dev" "test/clj"]}
+           ;; an alias to build an uberjar with the app
            :build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.4"}}
                    :ns-default build}}}

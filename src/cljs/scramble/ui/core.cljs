@@ -1,4 +1,6 @@
 (ns scramble.ui.core
+  "A simple Reagent app with a form, 2 inputs and a submit button. Includes
+  clientside validation, sending requests to the server and handling errors."
   (:require [ajax.core :refer [POST]]
             [ajax.edn :refer [edn-request-format edn-response-format]]
             [clojure.string :as str]
@@ -105,8 +107,7 @@
     [str-input :scramble/str2 "world"]
     [:div {:style {:display :flex
                    :justify-content :space-between}}
-     [:button {:on-click (fn [])}
-      "Scramble"]
+     [:button "Scramble"]
      (when-some [success? (:scramble/success? @result)]
        (if success?
          [:div {:style {:color :green}}
@@ -115,7 +116,7 @@
           "Mismatch"]))]]])
 
 (defn render
-  "Main entry point of the application; mounts the reagent app on
+  "Main entry point of the application; mounts the Reagent app on
   the root element of the page."
   []
   (rd/render [interface]
